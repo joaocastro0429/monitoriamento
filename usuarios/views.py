@@ -1,11 +1,16 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.contrib import auth
+from django.contrib.auth import authenticate
+
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
 from django.contrib import messages
 
 
+
 def cadastro(request):
+   
     if request.method=='GET':
      return render(request,'cadastro.html')
     else:
@@ -32,3 +37,23 @@ def cadastro(request):
        )
        
     return redirect('/usuarios/login')  
+
+def login(request):
+    if request.method == "GET":
+        return render(request,'login.html')
+    else:
+        if request.method == "POST":
+            username= request.POST.get('username')
+            senha = request.POST.get('senha')
+            
+            user= authenticate(request, username=username, password=senha)
+            if user:
+                auth.login(request,user)
+                return redirect('/mentorados/')
+            messages.add_message(request, constants.ERROR, 'Username ou senha inválidos')
+            return redirect('login')   
+                
+            
+    return HttpResponse(user)       
+def mentorados(request):
+    return render(request,'mentorados.html')
