@@ -55,5 +55,3 @@ def login(request):
                 
             
     return HttpResponse(user)       
-def mentorados(request):
-    return render(request,'mentorados.html')
