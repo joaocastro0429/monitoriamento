@@ -6,10 +6,18 @@ from django.contrib import messages
 
 
 def mentorados(request):
-    if request.method == "GET":
+    if request.method == 'GET':
         navigators = Navigators.objects.filter(user=request.user)
-        mentorados= Mentorados.objects.filter(user=request.user)
-        return render(request, 'mentorados.html', {'estagios': Mentorados.estagio_choices, 'navigators': navigators , 'mentorados':mentorados})
+        mentorados = Mentorados.objects.filter(user=request.user)
+        
+        estagios_flat = [i[1] for i in Mentorados.estagio_choices]
+        qtd_estagios = []
+
+        for i, j in Mentorados.estagio_choices:
+            qtd_estagios.append(Mentorados.objects.filter(estagio=i).count())
+
+    
+        return render(request, 'mentorados.html', {'estagios': Mentorados.estagio_choices, 'navigators': navigators, 'mentorados': mentorados, 'estagios_flat': estagios_flat, 'qtd_estagios': qtd_estagios})
     else:
         nome = request.POST.get('nome')
         foto = request.FILES.get('foto')
